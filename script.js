@@ -256,51 +256,52 @@ document.addEventListener('DOMContentLoaded', () => {
   if (contactForm) {
     contactForm.addEventListener('submit', async function(e) {
       e.preventDefault();
-      
+
       const name = document.getElementById('name');
       const email = document.getElementById('email');
       const message = document.getElementById('message');
       const submitBtn = document.getElementById('submitBtn');
       const formMessage = document.getElementById('formMessage');
-      
-      if (name.value.trim() === '') {
-        formMessage.textContent = 'Por favor, ingresa tu nombre';
-        formMessage.className = 'form-message error';
+
+      function showMessage(text, type) {
+        formMessage.textContent = text;
+        formMessage.className = 'form-message ' + type;
         formMessage.style.display = 'block';
+        requestAnimationFrame(() => {
+          formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+      }
+
+      if (name.value.trim() === '') {
+        showMessage('Por favor, ingresa tu nombre', 'error');
         name.focus();
         return;
       }
-      
+
       if (email.value.trim() === '') {
-        formMessage.textContent = 'Por favor, ingresa tu correo electrónico';
-        formMessage.className = 'form-message error';
-        formMessage.style.display = 'block';
+        showMessage('Por favor, ingresa tu correo electrónico', 'error');
         email.focus();
         return;
       }
-      
+
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email.value.trim())) {
-        formMessage.textContent = 'Por favor, ingresa un correo electrónico válido';
-        formMessage.className = 'form-message error';
-        formMessage.style.display = 'block';
+        showMessage('Por favor, ingresa un correo electrónico válido', 'error');
         email.focus();
         return;
       }
-      
+
       if (message.value.trim() === '') {
-        formMessage.textContent = 'Por favor, ingresa tu mensaje';
-        formMessage.className = 'form-message error';
-        formMessage.style.display = 'block';
+        showMessage('Por favor, ingresa tu mensaje', 'error');
         message.focus();
         return;
       }
-      
+
       const originalBtnText = submitBtn.textContent;
       submitBtn.textContent = 'Enviando...';
       submitBtn.disabled = true;
       formMessage.style.display = 'none';
-      
+
       try {
         const formData = new FormData(contactForm);
         const response = await fetch('https://formspree.io/f/mnpnrydn', {
@@ -310,24 +311,18 @@ document.addEventListener('DOMContentLoaded', () => {
             'Accept': 'application/json'
           }
         });
-        
+
         if (response.ok) {
-          formMessage.textContent = '¡Tu correo se envió exitosamente!';
-          formMessage.className = 'form-message success';
-          formMessage.style.display = 'block';
-          
+          showMessage('¡Tu correo se envió exitosamente!', 'success');
+
           name.value = '';
           email.value = '';
           message.value = '';
         } else {
-          formMessage.textContent = 'Error al enviar. Por favor, intenta nuevamente.';
-          formMessage.className = 'form-message error';
-          formMessage.style.display = 'block';
+          showMessage('Error al enviar. Por favor, intenta nuevamente.', 'error');
         }
       } catch (error) {
-        formMessage.textContent = 'Error de conexión. Por favor, intenta nuevamente.';
-        formMessage.className = 'form-message error';
-        formMessage.style.display = 'block';
+        showMessage('Error de conexión. Por favor, intenta nuevamente.', 'error');
       } finally {
         submitBtn.textContent = originalBtnText;
         submitBtn.disabled = false;

@@ -270,6 +270,15 @@ h1, h2, h3 {
   align-items: center;
 }
 
+/* Bloque de texto del hero: margen para separarlo del viewport y darle aire
+   respecto al borde izquierdo del contenedor y a los CTAs inferiores. */
+.hero-text {
+  margin-left: 24px;
+  margin-right: 24px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
 .hero-label {
   display: flex;
   align-items: center;
@@ -548,32 +557,62 @@ section {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  justify-content: center;
+  /* Anclaje a la izquierda: cada chip mantiene su borde izquierdo fijo
+     y crece hacia la derecha, sin que el centro visual se desplace. */
+  justify-content: flex-start;
 }
 
+/* Base del chip: ancho en reposo adaptado al texto. Al hacer hover, el
+   chip se expande hacia la derecha de forma estable porque el ícono está
+   posicionado de forma ABSOLUTA sobre el padding-left — no ocupa lugar
+   en el flex y nunca empuja al texto. */
 .skills-simple span {
-  padding: 4px 10px;
-  background: var(--bg-tertiary);
+  --chip-pad-x: 14px;
+  --chip-icon-size: 18px;
+  --chip-icon-gap: 8px;
+  --chip-icon-space: calc(var(--chip-icon-size) + var(--chip-icon-gap)); /* 26px */
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  /* En reposo: solo el texto, centrado dentro del padding. */
+  justify-content: center;
+  padding: 6px var(--chip-pad-x);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  font-size: 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
   color: var(--text-secondary);
-  transition: all 0.3s ease;
+  background: var(--bg-tertiary);
   cursor: default;
+  white-space: nowrap;
+  /* Transición lenta y fluida (700ms). NO se usa 'all'. */
+  transition:
+    padding-left 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 400ms ease,
+    border-color 400ms ease,
+    background-color 400ms ease;
+}
+
+/* El icono se posiciona de forma ABSOLUTA sobre el padding-left del chip.
+   Como no es parte del flex, no desplaza el texto ni mueve el centro. */
+.skills-simple span i {
+  position: absolute;
+  left: var(--chip-pad-x);
+  top: 50%;
+  transform: translate(-6px, -50%); /* inicia desplazado hacia la izquierda */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-tertiary) 50%, var(--bg-tertiary) 75%);
-  background-size: 200% 100%;
-}
-
-.skills-simple span i {
-  position: absolute;
-  left: 8px;
+  width: var(--chip-icon-size);
+  height: var(--chip-icon-size);
   font-size: 12px;
   opacity: 0;
-  transition: all 0.3s ease;
+  transition:
+    opacity 500ms ease 200ms,
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1) 150ms,
+    color 400ms ease;
 }
 
 @keyframes rotate-gradient {
@@ -582,11 +621,12 @@ section {
   100% { background-position: 0% 50%; }
 }
 
+/* Borde animado con gradiente en hover */
 .skills-simple span::before {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 20px;
+  border-radius: 999px;
   padding: 1px;
   background: linear-gradient(90deg, var(--accent), #00fff2, var(--accent));
   background-size: 200% 100%;
@@ -595,22 +635,34 @@ section {
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 400ms ease;
+  pointer-events: none; /* no interfiere con el área interactiva del chip */
 }
 
 .skills-simple span:hover {
   color: var(--accent);
-  padding-left: 26px;
+  border-color: transparent;
+  justify-content: center;
+  /* Solo crece el padding-left (donde está el icono absoluto).
+     Como el icono NO está en el flex, el centro del texto no se mueve:
+     el texto se mantiene donde estaba, y aparece el icono a su izquierda. */
+  padding-left: calc(var(--chip-pad-x) + var(--chip-icon-space));
 }
 
 .skills-simple span:hover::before {
   opacity: 1;
-  animation: rotate-gradient 2s linear infinite;
+  animation: rotate-gradient 2.4s linear infinite;
 }
 
 .skills-simple span:hover i {
   opacity: 1;
+  transform: translate(0, -50%); /* desliza desde la izquierda hasta su sitio */
   color: var(--accent);
+}
+
+/* Pequeño respiro entre badges adyacentes para que no se toquen al expandirse */
+.skills-simple span + span {
+  margin-left: 0;
 }
 
 .skill-card {
@@ -1663,6 +1715,8 @@ textarea.form-input {
   font-size: 15px;
   font-weight: 500;
   animation: fadeIn 0.3s ease;
+  /* Evita que el mensaje quede oculto bajo el header fijo al hacer scrollIntoView. */
+  scroll-margin-top: 100px;
 }
 
 .form-message.success {
