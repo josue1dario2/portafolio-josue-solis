@@ -7,12 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let particles = [];
     let mouse = { x: null, y: null, radius: 150 };
     
-    // Configuración
     const particleCount = 60;
     const connectionDistance = 120;
     const moveSpeed = 0.15;
     
-    // Colores
     const colors = ['#00d4aa', '#00fff2', '#00b894', '#55efc4'];
     
     function resizeCanvas() {
@@ -246,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Asegurar que los enlaces mailto funcionen correctamente
   document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
@@ -254,4 +251,87 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = mailtoUrl;
     });
   });
+
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name');
+      const email = document.getElementById('email');
+      const message = document.getElementById('message');
+      const submitBtn = document.getElementById('submitBtn');
+      const formMessage = document.getElementById('formMessage');
+      
+      if (name.value.trim() === '') {
+        formMessage.textContent = 'Por favor, ingresa tu nombre';
+        formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
+        name.focus();
+        return;
+      }
+      
+      if (email.value.trim() === '') {
+        formMessage.textContent = 'Por favor, ingresa tu correo electrónico';
+        formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
+        email.focus();
+        return;
+      }
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.value.trim())) {
+        formMessage.textContent = 'Por favor, ingresa un correo electrónico válido';
+        formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
+        email.focus();
+        return;
+      }
+      
+      if (message.value.trim() === '') {
+        formMessage.textContent = 'Por favor, ingresa tu mensaje';
+        formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
+        message.focus();
+        return;
+      }
+      
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.textContent = 'Enviando...';
+      submitBtn.disabled = true;
+      formMessage.style.display = 'none';
+      
+      try {
+        const formData = new FormData(contactForm);
+        const response = await fetch('https://formspree.io/f/mnpnrydn', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          formMessage.textContent = '¡Tu correo se envió exitosamente!';
+          formMessage.className = 'form-message success';
+          formMessage.style.display = 'block';
+          
+          name.value = '';
+          email.value = '';
+          message.value = '';
+        } else {
+          formMessage.textContent = 'Error al enviar. Por favor, intenta nuevamente.';
+          formMessage.className = 'form-message error';
+          formMessage.style.display = 'block';
+        }
+      } catch (error) {
+        formMessage.textContent = 'Error de conexión. Por favor, intenta nuevamente.';
+        formMessage.className = 'form-message error';
+        formMessage.style.display = 'block';
+      } finally {
+        submitBtn.textContent = originalBtnText;
+        submitBtn.disabled = false;
+      }
+    });
+  }
 });

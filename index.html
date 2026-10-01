@@ -314,25 +314,39 @@
       <!-- Contact Section -->
       <section class="contact" id="contacto">
         <div class="container">
-          <div class="contact-content contact-centered">
-            <p class="section-label">Contacto</p>
-            <h2 class="section-title">¿Hablamos?</h2>
-            <p class="contact-text">
-              ¿Listo para llevar tu producto al siguiente nivel con IA y automatización? Hablemos de tu próximo desafío:
-            </p>
-            <div class="contact-links">
-              <a href="mailto:josue1dario2solis3@gmail.com?subject=Consulta%20desde%20el%20portafolio" class="contact-link" title="Email">
-                <i class="fas fa-envelope"></i>
-                <span>Email</span>
-              </a>
-              <a href="https://www.linkedin.com/in/josue-dario-solis/" target="_blank" class="contact-link" title="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-                <span>LinkedIn</span>
-              </a>
-              <a href="https://github.com/josue1dario2" target="_blank" class="contact-link" title="GitHub">
-                <i class="fab fa-github"></i>
-                <span>GitHub</span>
-              </a>
+          <div class="contact-content contact-form-layout">
+            <div class="contact-info-centered">
+              <p class="section-label">Contacto</p>
+              <h2 class="section-title">¿Hablamos?</h2>
+              <p class="contact-text">
+                ¿Listo para llevar tu producto al siguiente nivel con IA y automatización? Hablemos de tu próximo desafío:
+              </p>
+            </div>
+            <form action="https://formspree.io/f/mnpnrydn" method="POST" class="contact-form" id="contactForm">
+              <div class="form-group">
+                <input type="text" id="name" name="name" required placeholder="Tu nombre" class="form-input">
+              </div>
+              <div class="form-group">
+                <input type="email" id="email" name="email" required placeholder="Tu correo electrónico" class="form-input">
+              </div>
+              <div class="form-group">
+                <textarea id="message" name="message" rows="5" required placeholder="Tu mensaje" class="form-input"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" id="submitBtn">Enviar mensaje</button>
+            </form>
+            <div id="formMessage" class="form-message" style="display: none;"></div>
+            <div class="contact-social-links">
+              <p class="social-label">O contáctame directamente:</p>
+              <div class="contact-links">
+                <a href="https://www.linkedin.com/in/josue-dario-solis/" target="_blank" class="contact-link" title="LinkedIn">
+                  <i class="fab fa-linkedin"></i>
+                  <span>LinkedIn</span>
+                </a>
+                <a href="https://github.com/josue1dario2" target="_blank" class="contact-link" title="GitHub">
+                  <i class="fab fa-github"></i>
+                  <span>GitHub</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
