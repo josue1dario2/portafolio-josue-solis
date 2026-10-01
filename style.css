@@ -53,6 +53,8 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 .noise {
