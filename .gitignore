@@ -1,0 +1,40 @@
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (aunque el proyecto no usa npm, por si se prueba algo local)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Python (servidor local)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secretos y variables de entorno (el sitio es estático, pero por si acaso)
+.env
+.env.*
+!.env.example
+
+# Build / cache
+dist/
+build/
+.cache/
+*.min.css
+*.min.js
+
+# Logs
+*.log
+
+# Archivos temporales del agente
+.opencode/
