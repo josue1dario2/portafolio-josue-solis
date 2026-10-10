@@ -36,5 +36,10 @@ build/
 # Logs
 *.log
 
+# Contexto de trabajo del agente: solo local, NO se publica
+AGENTS.md
+MEMORY.md
+MEMERY.md
+
 # Archivos temporales del agente
 .opencode/
